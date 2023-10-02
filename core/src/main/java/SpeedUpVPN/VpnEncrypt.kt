@@ -11,6 +11,7 @@ import javax.crypto.spec.SecretKeySpec
 
 object VpnEncrypt{
     private const val theKey="your key"
+    const val ssKey="sskey"
     const val vpnGroupName="SpeedUp.VPN"
     //const val v2vpnRemark="v2ray.vpn"
     const val freesubGroupName="https://git.io/jmsfq"
@@ -19,7 +20,6 @@ object VpnEncrypt{
     const val HTTP_PROXY_PORT = 58300
     const val enableLocalDns =  false
     const val enableSniffing = true
-    const val PREF_ROUTING_DOMAIN_STRATEGY = "IPIfNonMatch"
     const val enableSpeed = false
     @JvmStatic fun aesEncrypt(v:String, secretKey:String=theKey) = AES256.encrypt(v, secretKey)
     @JvmStatic fun aesDecrypt(v:String, secretKey:String=theKey) = AES256.decrypt(v, secretKey)
@@ -55,7 +55,7 @@ private object AES256{
     fun encrypt(str:String, secretKey:String):String{
         val encrypted = cipher(Cipher.ENCRYPT_MODE, secretKey).doFinal(str.toByteArray(Charsets.UTF_8))
         var encstr: String
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O || isWindows())
+        if ( isWindows() || Build.VERSION.SDK_INT >= Build.VERSION_CODES.O )
             encstr = java.util.Base64.getEncoder().encodeToString(encrypted)
         else
             encstr = android.util.Base64.encodeToString(encrypted, android.util.Base64.DEFAULT)
@@ -64,7 +64,7 @@ private object AES256{
     }
     fun decrypt(str:String, secretKey:String):String{
         val byteStr : ByteArray
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O || isWindows())
+        if (isWindows() || Build.VERSION.SDK_INT >= Build.VERSION_CODES.O  )
             byteStr=java.util.Base64.getDecoder().decode(str.toByteArray(Charsets.UTF_8))
         else
             byteStr=android.util.Base64.decode(str.toByteArray(Charsets.UTF_8), android.util.Base64.DEFAULT)

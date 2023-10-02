@@ -91,7 +91,12 @@ object Core {
     }
 
     const val appName = BuildConfig.FLAVOR
-    val applicationId = if (appName === "v2free") "free.v2ray.proxy.VPN" else "free.shadowsocks.proxy.VPN"
+    val applicationId = when (appName) {
+            "ssvpn" -> "free.shadowsocks.proxy.VPN"
+            "v2vpn" -> "free.v2ray.proxy.VPN"
+            "v2free" -> "v2free.app"
+            else -> ""
+        }
 
     val activeProfileIds
         get() = ProfileManager.getProfile(DataStore.profileId).let {
@@ -135,20 +140,29 @@ object Core {
     //Import built-in subscription
     fun updateBuiltinServers() {
         GlobalScope.launch {
-            val builtinSubUrls = app.resources.getStringArray(R.array.builtinSubUrls)
-            for (i in 0 until builtinSubUrls.size) {
-                val builtinSub = SSRSubManager.createSSSub(builtinSubUrls[i], VpnEncrypt.vpnGroupName)
-                if (builtinSub != null) break
-            }
+            if (applicationId!="v2free.app") {
+/*                val builtinSubUrls = app.resources.getStringArray(R.array.builtinSubUrls)
+                for (i in 0 until builtinSubUrls.size) {
+                    val builtinSub =
+                        SSRSubManager.createSSSub(builtinSubUrls[i], VpnEncrypt.vpnGroupName)
+                    if (builtinSub != null) break
+                }*/
 
-            val builtinGlobalUrls = app.resources.getStringArray(R.array.builtinGlobalUrls)
-            for (i in 0 until builtinGlobalUrls.size) {
-                val addSuccess = SSRSubManager.addProfiles(builtinGlobalUrls[i], VpnEncrypt.vpnGroupName)
-                if (addSuccess) break
-            }
+                val builtinGlobalUrls = app.resources.getStringArray(R.array.builtinGlobalUrls)
+                for (i in 0 until builtinGlobalUrls.size) {
+                    val addSuccess =
+                        SSRSubManager.addProfiles(builtinGlobalUrls[i], VpnEncrypt.vpnGroupName)
+                    if (addSuccess) break
+                }
 
-            if (DataStore.is_get_free_servers) importFreeSubs()
-            app.startService(Intent(app, SubscriptionService::class.java))
+                if (DataStore.is_get_free_servers) importFreeSubs()
+            }
+            try {
+                app.startService(Intent(app, SubscriptionService::class.java))
+            }
+            catch (e:Throwable){
+                e.printStackTrace()
+            }
         }
     }
 
@@ -172,7 +186,11 @@ object Core {
     fun init(app: Application, configureClass: KClass<out Any>) {
         this.app = app
         this.configureIntent = {
-            PendingIntent.getActivity(it, 0, Intent(it, configureClass.java)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+                PendingIntent.getActivity(it, 0, Intent(it, configureClass.java)
+                    .setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT), PendingIntent.FLAG_IMMUTABLE)
+            else
+                PendingIntent.getActivity(it, 0, Intent(it, configureClass.java)
                     .setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT), 0)
         }
 
@@ -199,9 +217,11 @@ object Core {
                 }
             }
         })
-        val config:Configuration  =  Configuration.Builder().build()
-        WorkManager.initialize(app.applicationContext, config)
-        UpdateCheck.enqueue() //google play Publishing, prohibiting self-renewal
+/*        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+            val config: Configuration = Configuration.Builder().build()
+            WorkManager.initialize(app.applicationContext, config)
+            UpdateCheck.enqueue() //google play Publishing, prohibiting self-renewal
+        }*/
 
         // handle data restored/crash
         if (Build.VERSION.SDK_INT >= 24 && DataStore.directBootAware &&

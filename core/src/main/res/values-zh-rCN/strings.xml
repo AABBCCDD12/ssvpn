@@ -43,6 +43,10 @@
     <!-- feature category -->
     <string name="ipv6">"IPv6 路由"</string>
     <string name="ipv6_summary">"转发 IPv6 流量到远程服务器"</string>
+      <string name="ss_route_summary">"SS默认路由，并重置所有SS节点路由"</string>
+<string name="v2_route_summary">"v2ray默认路由，并重置所有v2ray节点路由"</string>
+<string name="ss_route_list">Shadowsocks路由</string>
+<string name="v2_route_list">"V2ray路由"</string>
     <string name="route_list">"路由"</string>
     <string name="route_entry_gfwlist">"GFW 列表"</string>
     <string name="proxied_apps">"分应用 VPN"</string>
@@ -209,14 +213,14 @@
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
 </head>
     <body style=\'margin:0;padding:0;font-size:14px;text-align:right\'>
-      <a href=\'http://dongtaiwang.com/loc/mobile/\' style=\'color:#e4f2fd\'>动态网</a>
+      <a href=\'https://github.com/bannedbook/fanqiang#readme\' style=\'color:#e4f2fd\'>翻墙大全</a>
     </body>
     </html>
   ]]>"</string>
     <string name="recommended_site_2"><![CDATA[
     <html>
     <body style=\'margin:0;padding:0;font-size:14px;text-align:right\'>
-      <a href=\'https://www.bannedbook.org/?utm_source=ss.vpn.cn\' style=\'color:#e4f2fd\'>看禁闻</a>
+      <a href=\'https://t.me/fqchat\' style=\'color:#e4f2fd\'>翻墙交流群</a>
     </body>
     </html>
   ]]></string>
@@ -226,9 +230,9 @@
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
 </head>
     <body style=\'margin:0 auto;padding:5px 0;font-size:14px;text-align:center\'>
-      <a href=\'https://www.bannedbook.org/?utm_source=speedup.vpn.cn\' style=\'color:#e4f2fd\'>翻墙必看:每日热点禁闻,火爆评论,精彩视频</a>
+      <a href=\'https://w1.v2ai.top/auth/register?code=cd79\' style=\'color:#e4f2fd\'>高速翻墙-解锁ChatGPT</a>
     </body>
     </html>
   ]]>"</string>
-    <string name="update_check_url">https://raw.githubusercontent.com/bannedbook/ssvpn/master/update-zh.json</string>
+    <string name="update_check_url">https://raw.githubusercontent.com/bannedbook/v2ray.vpn/master/update-zh.json</string>
 </resources>
